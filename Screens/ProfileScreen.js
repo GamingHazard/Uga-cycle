@@ -14,24 +14,11 @@ import ProfileEditScreen from "./EditProfile";
 import axios from "axios";
 
 const ProfileScreen = () => {
-  const {
-    logout,
-    ShowEditPage,
-    HideEditPage,
-    MainModal,
-    SelectedImage,
-    UserInfo,
-    UserID,
-    UserToken,
-    ShowDeleteModal,
-    HideDeleteModal,
-    deleteModal,
-    deleteUserAccount,
-  } = useContext(AuthContext);
+  const { ShowEditPage, HideEditPage, MainModal, SelectedImage, UserInfo } =
+    useContext(AuthContext);
 
   const [user, setUser] = useState(UserInfo?.user || {});
   const [error, setError] = useState(null);
-  const [loadingDelete, setLoadingDelete] = useState(false);
 
   // Update user state when UserInfo changes
   useEffect(() => {
@@ -44,170 +31,114 @@ const ProfileScreen = () => {
   const userPhone = user.phone ? `+256 ${user.phone}` : "Phone not available";
   const userEmail = user.email || "Email not available";
 
-  const Delete = async () => {
-    setLoadingDelete(true);
-    await deleteUserAccount();
-    setLoadingDelete(false);
-  };
-
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.headerTitleContainer}>
-          <Text style={styles.headerTitle}>Profile</Text>
-        </View>
-      </View>
-      <ScrollView style={{ flex: 1 }}>
-        <View style={styles.profileContainer}>
-          <View style={styles.profilePicContainer}>
-            <Image
-              source={
-                SelectedImage
-                  ? { uri: SelectedImage }
-                  : require("../assets/profile.jpg")
-              }
-              style={{
-                width: "100%",
-                height: "100%",
-                borderRadius: 70,
-                resizeMode: "cover",
-              }}
-            />
-          </View>
-
-          <Text style={styles.userName}>{userName}</Text>
-          <Text style={styles.userHandle}>{userPhone}</Text>
-          <Text style={styles.userHandle}>{userEmail}</Text>
-
-          <View
+      <Text style={styles.headerTitle}>Profile</Text>
+      <View style={styles.profileContainer}>
+        <View style={styles.profilePicContainer}>
+          <Image
+            source={
+              SelectedImage
+                ? { uri: SelectedImage }
+                : require("../assets/profile.jpg")
+            }
             style={{
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              alignItems: "center",
-              padding: 10,
               width: "100%",
+              height: "100%",
+              borderRadius: 70,
+              resizeMode: "cover",
+              // bottom: 20,
+            }}
+          />
+        </View>
+
+        <View style={{ height: 30, width: "100%" }} />
+
+        <View style={styles.tabs}>
+          <Text style={{ fontSize: 24, fontWeight: "bold", flex: 1 }}>
+            Username
+          </Text>
+          <Text style={{ fontSize: 18, fontFamily: "monospace" }}>
+            {userName}
+          </Text>
+        </View>
+        <View style={styles.line} />
+        <View style={styles.tabs}>
+          <Text style={{ fontSize: 24, fontWeight: "bold", flex: 1 }}>
+            Email
+          </Text>
+          <Text
+            style={{
+              fontSize: 18,
+              fontFamily: "monospace",
+              width: "80%",
+              justifyContent: "center",
+              // backgroundColor: "lightgreen",
             }}
           >
-            <TouchableOpacity
-              onPress={ShowEditPage}
-              style={styles.editProfileButton}
-            >
-              <Text style={styles.editProfileText}>Edit Profile</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={ShowDeleteModal}
-              style={styles.editProfileButton}
-            >
-              <Text style={styles.editProfileText}>Delete Account</Text>
-            </TouchableOpacity>
-          </View>
+            {userEmail}
+          </Text>
         </View>
+        <View style={styles.line} />
+        <View style={styles.tabs}>
+          <Text style={{ fontSize: 24, fontWeight: "bold", flex: 1 }}>
+            Tel Number
+          </Text>
+          <Text style={{ fontSize: 18, fontFamily: "monospace" }}>
+            {userPhone}
+          </Text>
+        </View>
+        <View style={styles.line} />
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+            alignItems: "center",
+            padding: 10,
+            width: "100%",
+          }}
+        >
+          <TouchableOpacity
+            onPress={ShowEditPage}
+            style={styles.editProfileButton}
+          >
+            <Text style={styles.editProfileText}>Edit Profile</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
 
-        <View style={styles.divider} />
+      <View style={styles.divider} />
 
-        <TouchableOpacity style={styles.logoutButton} onPress={logout}>
-          <View style={styles.logoutButtonContent}>
-            <Text style={styles.logoutText}>Log out</Text>
-          </View>
-        </TouchableOpacity>
-
-        <ModalView
-          HideModal={HideEditPage}
-          content={
-            <ProfileEditScreen
-              FetchProfileUpdate={HideEditPage}
-              cancel={HideEditPage}
-            />
-          }
-          modalVisible={MainModal}
-        />
-        {/* account deleting Modal */}
-        <ModalView
-          content={
-            <View
-              style={{
-                width: "100%",
-                borderRadius: 10,
-                padding: 13,
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "white",
-              }}
-            >
-              <Text
-                style={{
-                  fontWeight: "bold",
-                  fontSize: 18,
-                  alignSelf: "flex-start",
-                  color: "red",
-                }}
-              >
-                Confirm Deletion
-              </Text>
-              <Text
-                style={{
-                  color: "red",
-                  fontSize: 16,
-                }}
-              >
-                Are you sure you want to delete your account? This action cannot
-                be undone.
-              </Text>
-              <View
-                style={{
-                  width: "100%",
-                  flexDirection: "row",
-                  padding: 10,
-                  justifyContent: "space-evenly",
-                  alignItems: "center",
-                  marginTop: 20,
-                }}
-              >
-                <TouchableOpacity
-                  onPress={HideDeleteModal}
-                  style={{
-                    padding: 10,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: "#3061e4",
-                    borderRadius: 20,
-                    paddingHorizontal: 40,
-                  }}
-                >
-                  <Text style={styles.editProfileText}>Cancel</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={Delete}
-                  style={{
-                    padding: 10,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: "red",
-                    borderRadius: 20,
-                    flexDirection: "row",
-                  }}
-                >
-                  {loadingDelete ? (
-                    <ActivityIndicator size="small" color="#fff" />
-                  ) : (
-                    <Text style={styles.editProfileText}>Delete Account</Text>
-                  )}
-                </TouchableOpacity>
-              </View>
-            </View>
-          }
-          modalVisible={deleteModal}
-        />
-      </ScrollView>
+      <ModalView
+        HideModal={HideEditPage}
+        content={
+          <ProfileEditScreen
+            FetchProfileUpdate={HideEditPage}
+            cancel={HideEditPage}
+          />
+        }
+        modalVisible={MainModal}
+      />
+      {/* account deleting Modal */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  tabs: {
+    width: "100%",
+    padding: 15,
+    flexDirection: "row",
+  },
+  line: {
+    width: "100%",
+    height: 1,
+    borderWidth: 0.5,
+    borderColor: "lightgrey",
+  },
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "whitesmoke",
     alignItems: "center",
   },
   header: {
@@ -225,12 +156,16 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontWeight: "bold",
     fontSize: 26,
+    marginVertical: 10,
   },
   profileContainer: {
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    height: 300,
+    // height: 300,
+    // top: 20,
+    backgroundColor: "white",
+    paddingTop: 10,
   },
   profilePicContainer: {
     height: 120,
@@ -239,7 +174,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#3061e4",
     padding: 4,
-    marginVertical: 10,
+    // marginVertical: 10,
+    // top: 20,
   },
   userName: {
     fontWeight: "bold",

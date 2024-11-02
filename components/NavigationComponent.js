@@ -12,6 +12,13 @@ import { AuthContext } from "../context/AuthContext";
 import HomeScreen from "../Screens/HomeScreen";
 import ProfileScreen from "../Screens/ProfileScreen";
 import SettingsScreen from "../Screens/Settings";
+import PrivacyScreen from "../Screens/PrivacyScreen";
+import ServiceScreen from "../Screens/ServiceScreen";
+import SecurityScreen from "../Screens/SecurityScreen";
+import ReportScreen from "../Screens/ReportScreen";
+import SupportScreen from "../Screens/SupportScreen";
+import NotificationsScreen from "../Screens/NotificationsScreen";
+import CommunityScreen from "../Screens/CommunityScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -29,40 +36,70 @@ function AuthStack() {
   );
 }
 
-// Main App Component as a functional component
-export default function Nav() {
+// Tab Navigator for Main Screens
+function MainTabNavigator() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === "Home") {
+            iconName = focused ? "home" : "home-outline";
+          } else if (route.name === "Settings") {
+            iconName = focused ? "settings" : "settings-outline";
+          } else if (route.name === "Services") {
+            iconName = focused ? "trash" : "trash-outline";
+          } else if (route.name === "Notifications") {
+            iconName = focused ? "mail" : "mail-outline";
+          } else if (route.name === "Community") {
+            iconName = focused ? "people" : "people-outline";
+          }
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: "#547c5c",
+        tabBarInactiveTintColor: "gray",
+        headerShown: false, // Removes headers from all tab screens
+      })}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Community" component={CommunityScreen} />
+      <Tab.Screen name="Services" component={ServiceScreen} />
+      <Tab.Screen name="Notifications" component={NotificationsScreen} />
+      <Tab.Screen name="Settings" component={SettingsScreen} />
+    </Tab.Navigator>
+  );
+}
+
+// Root Navigator (combining AuthStack and MainTabNavigator)
+function RootNavigator() {
   const { UserToken } = useContext(AuthContext);
 
   return (
-    <NavigationContainer>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       {UserToken !== null ? (
-        <Tab.Navigator
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
-
-              if (route.name === "Home") {
-                iconName = focused ? "home" : "home-outline";
-              } else if (route.name === "Settings") {
-                iconName = focused ? "settings" : "settings-outline";
-              } else if (route.name === "Profile") {
-                iconName = focused ? "person" : "person-outline";
-              }
-
-              return <Ionicons name={iconName} size={size} color={color} />;
-            },
-            tabBarActiveTintColor: "black",
-            tabBarInactiveTintColor: "gray",
-            headerShown: false, // Removes headers from all tab screens
-          })}
-        >
-          <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen name="Settings" component={SettingsScreen} />
-          <Tab.Screen name="Profile" component={ProfileScreen} />
-        </Tab.Navigator>
+        <>
+          <Stack.Screen name="Main" component={MainTabNavigator} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
+          <Stack.Screen name="Security" component={SecurityScreen} />
+          <Stack.Screen name="Report" component={ReportScreen} />
+          <Stack.Screen name="Privacy" component={PrivacyScreen} />
+          <Stack.Screen name="Support" component={SupportScreen} />
+          {/* Add any other screens outside the tab navigator here */}
+        </>
       ) : (
-        <AuthStack />
+        <Stack.Screen name="Auth" component={AuthStack} />
       )}
+    </Stack.Navigator>
+  );
+}
+
+// Main App Component
+export default function Nav() {
+  return (
+    <NavigationContainer>
+      <RootNavigator />
     </NavigationContainer>
   );
 }

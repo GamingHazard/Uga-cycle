@@ -46,8 +46,9 @@ const LoginScreen = ({ navigation }) => {
         await login(identifier, password);
       } catch (error) {
         Alert.alert(
-          "Login Error",
-          error.response?.data?.message || "An error occurred."
+          "Login failed",
+          error.response?.data?.message ||
+            "check your internet connection and try againg"
         );
       } finally {
         setLoading(false);

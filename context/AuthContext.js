@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
   const [UserID, setUserID] = useState(null);
   const [deleteModal, setdeleteModal] = useState(false);
 
+  // User Regiestration
   const register = async (name, email, phone, password) => {
     setIsLoading(true);
     try {
@@ -56,6 +57,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // User Login
   const login = async (identifier, password) => {
     try {
       const response = await axios.post(
@@ -82,6 +84,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // User Logout
   const logout = () => {
     setIsLoading(true);
     setUserToken(null);
