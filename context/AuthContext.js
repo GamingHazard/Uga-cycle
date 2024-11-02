@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://auth-db-23ly.onrender.com/register",
+        "https://uga-cycle-backend-1.onrender.com/register",
         {
           name,
           email,
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (identifier, password) => {
     try {
       const response = await axios.post(
-        "https://auth-db-23ly.onrender.com/login",
+        "https://uga-cycle-backend-1.onrender.com/login",
         {
           identifier,
           password,
@@ -273,7 +273,7 @@ export const AuthProvider = ({ children }) => {
 
       // Send PATCH request to update the user profile
       const updateResponse = await axios.patch(
-        `https://auth-db-23ly.onrender.com/updateUser/${UserID}`,
+        `https://uga-cycle-backend-1.onrender.com/updateUser/${UserID}`,
         updateData,
         {
           headers: {
@@ -299,7 +299,7 @@ export const AuthProvider = ({ children }) => {
   const deleteUserAccount = async () => {
     try {
       const deleteResponse = await axios.delete(
-        `https://auth-db-23ly.onrender.com/deleteUser/${UserID}`,
+        `https://uga-cycle-backend-1.onrender.com/deleteUser/${UserID}`,
         {
           headers: {
             Authorization: `Bearer ${UserToken}`,
@@ -339,6 +339,7 @@ export const AuthProvider = ({ children }) => {
         HideDeleteModal,
         deleteModal,
         deleteUserAccount,
+        UserID,
       }}
     >
       {children}

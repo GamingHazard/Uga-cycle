@@ -1,4 +1,10 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+} from "react-native";
 import React, { useState, useContext } from "react";
 import { TextInput } from "react-native";
 import { TouchableOpacity } from "react-native";

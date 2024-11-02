@@ -55,9 +55,7 @@ const RegisterScreen = ({ navigation }) => {
     if (!emailError && !phoneError && name && password) {
       setLoading(true);
       register(name, email, phone, password);
-      setTimeout(() => {
-        setLoading(false);
-      }, 2000);
+      setTimeout(() => {}, 2000);
     }
   };
 
@@ -310,7 +308,7 @@ const RegisterScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "whitesmoke",
+    backgroundColor: "#547c5c",
     justifyContent: "center",
     alignItems: "center",
   },

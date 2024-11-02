@@ -92,6 +92,7 @@ const LoginScreen = ({ navigation }) => {
             flexDirection: "row",
             alignItems: "center",
             borderColor: "lightgrey",
+            backgroundColor: "#fbfbda",
           }}
         >
           <Fontisto name="locked" size={24} color="grey" />
@@ -166,14 +167,14 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "whitesmoke",
+    backgroundColor: "#547c5c",
     justifyContent: "center",
     alignItems: "center",
   },
   formContainer: {
     padding: 15,
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: "#547c5c",
     elevation: 10,
     borderRadius: 10,
     marginHorizontal: 20,
@@ -183,6 +184,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 25,
     marginVertical: 15,
+    color: "#fbfbda",
   },
   inputContainer: {
     width: "100%",
@@ -193,6 +195,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     flexDirection: "row",
     alignItems: "center",
+    backgroundColor: "#fbfbda",
   },
   input: {
     flex: 1,
