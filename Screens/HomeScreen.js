@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  ImageBackground,
 } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { LinearGradient } from "expo-linear-gradient";
@@ -51,43 +52,24 @@ const HomeScreen = () => {
         </View>
       </View>
       <ScrollView style={{ width: "100%", flex: 1 }}>
-        {/* Waste mkt tab */}
+        {/* Waste Market tab with background image */}
         <TouchableOpacity style={{ margin: 10, borderRadius: 15 }}>
-          <LinearGradient
-            colors={["rgba(0,0,0,1)", "rgba(0,0,0,0.5)", "rgba(0,0,0,0.2)"]}
-            style={styles.gradientContainer}
-            start={{ x: 0.5, y: 1 }} // Starting from bottom
-            end={{ x: 0.5, y: 0 }} // Ending at the top
+          <ImageBackground
+            source={require("../assets/profile.jpg")} // Replace with your image path
+            style={styles.backgroundImage}
+            imageStyle={{ borderRadius: 15 }} // Apply border radius to the image
           >
-            <View
-              style={{
-                width: "100%",
-                height: 100,
-                // backgroundColor: "white",
-                flex: 1,
-              }}
-            />
-            <View
-              style={{
-                width: "100%",
-                height: "auto",
-                alignItems: "center",
-                justifyContent: "center",
-                // backgroundColor: "lightgrey",
-              }}
+            <LinearGradient
+              colors={["rgba(0,0,0,1)", "rgba(0,0,0,0.5)", "rgba(0,0,0,0.2)"]}
+              style={styles.gradientContainer}
+              start={{ x: 0.5, y: 1 }} // Starting from bottom
+              end={{ x: 0.5, y: 0 }} // Ending at the top
             >
-              <Text
-                style={{
-                  fontSize: 26,
-                  color: "white",
-                  fontWeight: "bold",
-                  textAlignVertical: "top",
-                }}
-              >
-                Waste Market
-              </Text>
-            </View>
-          </LinearGradient>
+              <View style={styles.tabContentContainer}>
+                <Text style={styles.tabText}>Waste Market</Text>
+              </View>
+            </LinearGradient>
+          </ImageBackground>
         </TouchableOpacity>
 
         {/* Schedule Tab */}
@@ -95,89 +77,30 @@ const HomeScreen = () => {
           <LinearGradient
             colors={["rgba(0,0,0,1)", "rgba(0,0,0,0.5)", "rgba(0,0,0,0.2)"]}
             style={styles.gradientContainer}
-            start={{ x: 0.5, y: 1 }} // Starting from bottom
-            end={{ x: 0.5, y: 0 }} // Ending at the top
+            start={{ x: 0.5, y: 1 }}
+            end={{ x: 0.5, y: 0 }}
           >
-            <View
-              style={{
-                width: "100%",
-                height: 100,
-                // backgroundColor: "white",
-                flex: 1,
-              }}
-            />
-            <View
-              style={{
-                width: "100%",
-                height: "auto",
-                alignItems: "center",
-                justifyContent: "center",
-                // backgroundColor: "lightgrey",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 26,
-                  color: "white",
-                  fontWeight: "bold",
-                  textAlignVertical: "top",
-                }}
-              >
-                Garbage Schedule
-              </Text>
+            <View style={styles.tabContentContainer}>
+              <Text style={styles.tabText}>Garbage Schedule</Text>
             </View>
           </LinearGradient>
         </TouchableOpacity>
+
         {/* Tips Tab */}
         <TouchableOpacity style={{ margin: 10, borderRadius: 15 }}>
           <LinearGradient
             colors={["rgba(0,0,0,1)", "rgba(0,0,0,0.5)", "rgba(0,0,0,0.2)"]}
             style={styles.gradientContainer}
-            start={{ x: 0.5, y: 1 }} // Starting from bottom
-            end={{ x: 0.5, y: 0 }} // Ending at the top
+            start={{ x: 0.5, y: 1 }}
+            end={{ x: 0.5, y: 0 }}
           >
-            <View
-              style={{
-                width: "100%",
-                height: 100,
-                // backgroundColor: "white",
-                flex: 1,
-              }}
-            />
-            <View
-              style={{
-                width: "100%",
-                height: "auto",
-                alignItems: "center",
-                justifyContent: "center",
-                // backgroundColor: "lightgrey",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 26,
-                  color: "white",
-                  fontWeight: "bold",
-                  textAlignVertical: "top",
-                }}
-              >
-                Tips
-              </Text>
+            <View style={styles.tabContentContainer}>
+              <Text style={styles.tabText}>Tips</Text>
             </View>
           </LinearGradient>
         </TouchableOpacity>
 
-        <Text
-          style={{
-            fontWeight: "bold",
-            fontSize: 26,
-            color: "black",
-            marginVertical: 20,
-            marginHorizontal: 10,
-          }}
-        >
-          News Updates
-        </Text>
+        <Text style={styles.newsTitle}>News Updates</Text>
       </ScrollView>
     </View>
   );
@@ -192,11 +115,32 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 260,
     padding: 10,
-
-    backgroundColor: "#547c5c",
+    // backgroundColor: "#547c5c",
     alignItems: "center",
-    // marginHorizontal: 10,
     borderRadius: 10,
+  },
+  backgroundImage: {
+    width: "100%",
+    height: 260,
+  },
+  tabContentContainer: {
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "flex-end", // Align content to the bottom
+    paddingBottom: 20, // Add padding to avoid text touching the bottom edge
+  },
+  tabText: {
+    fontSize: 26,
+    color: "white",
+    fontWeight: "bold",
+  },
+  newsTitle: {
+    fontWeight: "bold",
+    fontSize: 26,
+    color: "black",
+    marginVertical: 20,
+    marginHorizontal: 10,
   },
 });
 
