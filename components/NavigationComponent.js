@@ -19,6 +19,16 @@ import ReportScreen from "../Screens/ReportScreen";
 import SupportScreen from "../Screens/SupportScreen";
 import NotificationsScreen from "../Screens/NotificationsScreen";
 import CommunityScreen from "../Screens/CommunityScreen";
+import Aquila from "../Screens/SevicesProviders/Aquila";
+import Armstrong from "../Screens/SevicesProviders/Armstrong";
+import Asante from "../Screens/SevicesProviders/Asante";
+import Best from "../Screens/SevicesProviders/Best";
+import Bins from "../Screens/SevicesProviders/Bins";
+import DeWaste from "../Screens/SevicesProviders/DeWaste";
+import KCCA from "../Screens/SevicesProviders/KCCA";
+import Nabugabo from "../Screens/SevicesProviders/Nabugabo";
+import Swift from "../Screens/SevicesProviders/Swift";
+import YoWaste from "../Screens/SevicesProviders/YoWaste";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -86,6 +96,16 @@ function RootNavigator() {
           <Stack.Screen name="Report" component={ReportScreen} />
           <Stack.Screen name="Privacy" component={PrivacyScreen} />
           <Stack.Screen name="Support" component={SupportScreen} />
+          <Stack.Screen name="Aquila" component={Aquila} />
+          <Stack.Screen name="Armstrong" component={Armstrong} />
+          <Stack.Screen name="Asante" component={Asante} />
+          <Stack.Screen name="Best" component={Best} />
+          <Stack.Screen name="Bins" component={Bins} />
+          <Stack.Screen name="DeWaste" component={DeWaste} />
+          <Stack.Screen name="KCCA" component={KCCA} />
+          <Stack.Screen name="Nabugabo" component={Nabugabo} />
+          <Stack.Screen name="Swift" component={Swift} />
+          <Stack.Screen name="YoWaste" component={YoWaste} />
           {/* Add any other screens outside the tab navigator here */}
         </>
       ) : (

@@ -1,8 +1,16 @@
-import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
 import React, { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
-const ServiceScreen = () => {
+const ServiceScreen = ({ navigation }) => {
   const { SelectedImage } = useContext(AuthContext);
   return (
     <ScrollView
@@ -17,7 +25,8 @@ const ServiceScreen = () => {
         Waste Management Services
       </Text>
       {/* Tab 0 */}
-      <View
+      <Pressable
+        onPress={() => navigation.navigate("KCCA")}
         style={{
           width: "100%",
           height: "auto",
@@ -66,9 +75,10 @@ const ServiceScreen = () => {
             very bulky to handle.
           </Text>
         </View>
-      </View>
+      </Pressable>
       {/* Tab 1 */}
-      <View
+      <Pressable
+        onPress={() => navigation.navigate("Asante")}
         style={{
           width: "100%",
           height: "auto",
@@ -119,10 +129,11 @@ const ServiceScreen = () => {
             and renewable energy.
           </Text>
         </View>
-      </View>
+      </Pressable>
 
       {/* Tab 2 */}
-      <View
+      <Pressable
+        onPress={() => navigation.navigate("Bins")}
         style={{
           width: "100%",
           height: "auto",
@@ -135,13 +146,9 @@ const ServiceScreen = () => {
       >
         <View style={{ flexDirection: "row" }}>
           <Image
-            source={
-              SelectedImage
-                ? {
-                    uri: "https://www.scrapmonster.com/uploads/company_logo/2023/9/1694684332.webp",
-                  }
-                : require("../assets/profile.jpg")
-            }
+            source={{
+              uri: "https://www.scrapmonster.com/uploads/company_logo/2023/9/1694684332.webp",
+            }}
             style={{ width: 100, height: 100 }}
           />
           <View
@@ -166,10 +173,11 @@ const ServiceScreen = () => {
             Services for Home, Office, Schools, Hospitals & So much more.
           </Text>
         </View>
-      </View>
+      </Pressable>
 
       {/* Tab 3 */}
-      <View
+      <Pressable
+        onPress={() => navigation.navigate("Armstrong")}
         style={{
           width: "100%",
           height: "auto",
@@ -213,10 +221,11 @@ const ServiceScreen = () => {
             and commercial waste, and materials that can be recycled
           </Text>
         </View>
-      </View>
+      </Pressable>
 
       {/* Tab 4 */}
-      <View
+      <Pressable
+        onPress={() => navigation.navigate("Swift")}
         style={{
           width: "100%",
           height: "auto",
@@ -261,10 +270,11 @@ const ServiceScreen = () => {
             responsible commercial cleaning
           </Text>
         </View>
-      </View>
+      </Pressable>
 
       {/* Tab 5 */}
-      <View
+      <Pressable
+        onPress={() => navigation.navigate("Best")}
         style={{
           width: "100%",
           height: "auto",
@@ -307,10 +317,11 @@ const ServiceScreen = () => {
             products.
           </Text>
         </View>
-      </View>
+      </Pressable>
 
       {/* Tab 6 */}
-      <View
+      <Pressable
+        onPress={() => navigation.navigate("Nabugabo")}
         style={{
           width: "100%",
           height: "auto",
@@ -355,9 +366,10 @@ const ServiceScreen = () => {
             solid waste in Zone 5
           </Text>
         </View>
-      </View>
+      </Pressable>
       {/* Tab 7 */}
-      <View
+      <Pressable
+        onPress={() => navigation.navigate("DeWaste")}
         style={{
           width: "100%",
           height: "auto",
@@ -398,9 +410,10 @@ const ServiceScreen = () => {
             Cleaning 3.Medical waste Management…
           </Text>
         </View>
-      </View>
+      </Pressable>
       {/* Tab 8 */}
-      <View
+      <Pressable
+        onPress={() => navigation.navigate("YoWaste")}
         style={{
           width: "100%",
           height: "auto",
@@ -443,10 +456,11 @@ const ServiceScreen = () => {
             Cleaning 3.Medical waste Management…
           </Text>
         </View>
-      </View>
+      </Pressable>
 
       {/* Tab 9 */}
-      <View
+      <Pressable
+        onPress={() => navigation.navigate("Aquila")}
         style={{
           width: "100%",
           height: "auto",
@@ -491,7 +505,7 @@ const ServiceScreen = () => {
             the globe.
           </Text>
         </View>
-      </View>
+      </Pressable>
     </ScrollView>
   );
 };

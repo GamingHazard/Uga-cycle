@@ -3,12 +3,14 @@ import { StyleSheet, View } from "react-native";
 
 import { AuthProvider } from "./context/AuthContext";
 import Nav, { AuthStack } from "./components/NavigationComponent";
+import KCCA from "./Screens/SevicesProviders/KCCA";
 export default function App() {
   return (
     <AuthProvider>
       <View style={styles.container}>
         <StatusBar hidden={true} />
         <Nav />
+        {/* <KCCA /> */}
       </View>
     </AuthProvider>
   );
@@ -17,6 +19,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "whitesmoke",
   },
 });
