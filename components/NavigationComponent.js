@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { View, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -29,6 +30,7 @@ import KCCA from "../Screens/SevicesProviders/KCCA";
 import Nabugabo from "../Screens/SevicesProviders/Nabugabo";
 import Swift from "../Screens/SevicesProviders/Swift";
 import YoWaste from "../Screens/SevicesProviders/YoWaste";
+import SaleScreen from "../Screens/SaleScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -46,13 +48,37 @@ function AuthStack() {
   );
 }
 
-// Tab Navigator for Main Screens
+// Tab Navigator for Main Screens with Badge Logic
 function MainTabNavigator() {
+  const [communityBadgeCount, setCommunityBadgeCount] = useState(0);
+  const [notificationsBadgeCount, setNotificationsBadgeCount] = useState(0);
+
+  // Example logic for fetching new messages/posts count
+  useEffect(() => {
+    const fetchCommunityPosts = async () => {
+      // Replace with your fetch logic
+      const newPosts = await getNewCommunityPosts();
+      setCommunityBadgeCount(newPosts.length);
+    };
+
+    const fetchNotifications = async () => {
+      // Replace with your fetch logic
+      const newMessages = await getNewNotifications();
+      setNotificationsBadgeCount(newMessages.length);
+    };
+
+    // Call fetch functions periodically or on app focus
+    fetchCommunityPosts();
+    fetchNotifications();
+  }, []);
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
+          let badgeCount;
+
           if (route.name === "Home") {
             iconName = focused ? "home" : "home-outline";
           } else if (route.name === "Settings") {
@@ -61,11 +87,34 @@ function MainTabNavigator() {
             iconName = focused ? "trash" : "trash-outline";
           } else if (route.name === "Notifications") {
             iconName = focused ? "mail" : "mail-outline";
+            badgeCount = notificationsBadgeCount;
           } else if (route.name === "Community") {
             iconName = focused ? "people" : "people-outline";
+            badgeCount = communityBadgeCount;
           }
 
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return (
+            <View>
+              <Ionicons name={iconName} size={size} color={color} />
+              {badgeCount > 0 && (
+                <View
+                  style={{
+                    position: "absolute",
+                    right: -10,
+                    top: -3,
+                    backgroundColor: "red",
+                    borderRadius: 10,
+                    paddingHorizontal: 5,
+                    paddingVertical: 2,
+                  }}
+                >
+                  <Text style={{ color: "white", fontSize: 10 }}>
+                    {badgeCount}
+                  </Text>
+                </View>
+              )}
+            </View>
+          );
         },
         tabBarActiveTintColor: "#547c5c",
         tabBarInactiveTintColor: "gray",
@@ -106,7 +155,7 @@ function RootNavigator() {
           <Stack.Screen name="Nabugabo" component={Nabugabo} />
           <Stack.Screen name="Swift" component={Swift} />
           <Stack.Screen name="YoWaste" component={YoWaste} />
-          {/* Add any other screens outside the tab navigator here */}
+          <Stack.Screen name="Sale" component={SaleScreen} />
         </>
       ) : (
         <Stack.Screen name="Auth" component={AuthStack} />

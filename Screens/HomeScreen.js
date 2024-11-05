@@ -11,7 +11,7 @@ import {
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { LinearGradient } from "expo-linear-gradient";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -53,7 +53,10 @@ const HomeScreen = () => {
       </View>
       <ScrollView style={{ width: "100%", flex: 1 }}>
         {/* Waste Market tab with background image */}
-        <TouchableOpacity style={{ margin: 10, borderRadius: 15 }}>
+        <TouchableOpacity
+          style={{ margin: 10, borderRadius: 15 }}
+          onPress={() => navigation.navigate("Sale")}
+        >
           <ImageBackground
             source={require("../assets/profile.jpg")} // Replace with your image path
             style={styles.backgroundImage}

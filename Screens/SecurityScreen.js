@@ -4,23 +4,75 @@ import {
   Text,
   View,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import React, { useState, useContext } from "react";
 import { TextInput } from "react-native";
 import { TouchableOpacity } from "react-native";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import ModalView from "../components/Modal";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../context/AuthContext"; // Make sure to import AuthContext
+import axios from "axios"; // Don't forget to import axios if you haven't already
 
 const SecurityScreen = () => {
-  const { ShowDeleteModal, HideDeleteModal, deleteModal } =
+  const { ShowDeleteModal, HideDeleteModal, deleteUserAccount } =
     useContext(AuthContext);
   const [loadingDelete, setLoadingDelete] = useState(false);
-  const Delete = async () => {
-    setLoadingDelete(true);
-    await deleteUserAccount();
-    setLoadingDelete(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleChangePassword = async () => {
+    if (!newPassword || !confirmPassword) {
+      return Alert.alert("Error", "Please fill in all password fields.");
+    }
+
+    if (newPassword !== confirmPassword) {
+      return Alert.alert("Error", "New passwords do not match.");
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.patch(
+        `https://your-backend-url/reset-password/${resetToken || ""}`, // Attach resetToken if available
+        { password: newPassword, userToken } // Send userToken if logged in
+      );
+      Alert.alert("Success", response.data.message);
+      navigation.navigate("Login");
+    } catch (error) {
+      Alert.alert("Error", error.response?.data?.message || "Server error");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const handleDeleteAccount = async () => {
+    if (!oldPassword) {
+      return Alert.alert(
+        "Error",
+        "Please enter your password to confirm deletion."
+      );
+    }
+
+    setLoadingDelete(true);
+    try {
+      // Call the deleteUserAccount function from AuthContext
+      await deleteUserAccount(oldPassword); // Pass the old password for confirmation
+
+      Alert.alert("Success", "Your account has been deleted successfully.");
+      // Optionally, navigate to the login screen or home screen after deletion
+      // navigation.navigate("Login");
+    } catch (error) {
+      Alert.alert(
+        "Error",
+        error.response?.data?.message || "Failed to delete account."
+      );
+    } finally {
+      setLoadingDelete(false);
+      setOldPassword(""); // Clear the password input field
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={{ marginVertical: 10, fontSize: 20, fontWeight: "bold" }}>
@@ -42,7 +94,6 @@ const SecurityScreen = () => {
             width: "100%",
             padding: 15,
             borderRadius: 10,
-
             backgroundColor: "white",
             alignItems: "center",
           }}
@@ -56,271 +107,69 @@ const SecurityScreen = () => {
           >
             Change password
           </Text>
-          <View
-            style={{
-              width: "100%",
-              backgroundColor: "whitesmoke",
-              padding: 15,
-              marginVertical: 10,
-              borderRadius: 15,
-            }}
-          >
-            <TextInput placeholder="Enter old password" />
+          {error ? (
+            <Text style={{ color: "red", marginVertical: 5 }}>{error}</Text>
+          ) : null}
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Enter old password"
+              value={oldPassword}
+              onChangeText={setOldPassword}
+              secureTextEntry
+            />
           </View>
-          <View
-            style={{
-              width: "100%",
-              backgroundColor: "whitesmoke",
-              padding: 15,
-              marginVertical: 10,
-              borderRadius: 15,
-            }}
-          >
-            <TextInput placeholder="Enter new password" />
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Enter new password"
+              value={newPassword}
+              onChangeText={setNewPassword}
+              secureTextEntry
+            />
           </View>
-          <View
-            style={{
-              width: "100%",
-              backgroundColor: "whitesmoke",
-              padding: 15,
-              marginVertical: 10,
-              borderRadius: 15,
-            }}
-          >
-            <TextInput placeholder="Confirm new password" />
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Confirm new password"
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              secureTextEntry
+            />
           </View>
           <TouchableOpacity
-            style={{
-              width: "40%",
-              padding: 10,
-              borderRadius: 15,
-              backgroundColor: "teal",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+            style={styles.button}
+            onPress={handleChangePassword}
           >
-            <Text style={{ color: "white" }}>Change</Text>
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={{ color: "white" }}>Change</Text>
+            )}
           </TouchableOpacity>
         </View>
-        <Text
-          style={{
-            alignSelf: "flex-start",
-            marginHorizontal: 16,
-            marginVertical: 10,
-            color: "grey",
-          }}
-        >
-          Permissions
-        </Text>
-        <View
-          style={{
-            width: "100%",
-            padding: 10,
-            backgroundColor: "white",
-            borderRadius: 10,
-            marginVertical: 10,
-          }}
-        >
+
+        {/* Delete Account Section */}
+        <View style={styles.deleteAccountContainer}>
           <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-            Permissions granted to the app
+            Delete Account
           </Text>
-          {/* camera */}
-          <View
-            style={{
-              width: "100%",
-              padding: 15,
-              marginVertical: 10,
-              borderRadius: 8,
-              backgroundColor: "whitesmoke",
-            }}
-          >
-            <Text style={{ fontSize: 12, fontWeight: "bold" }}>Camera</Text>
-            <Text style={{ fontSize: 11, color: "grey" }}>
-              The app is allowed to access both the front and rear camera.
-            </Text>
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Enter your password to confirm"
+              value={oldPassword}
+              onChangeText={setOldPassword}
+              secureTextEntry
+            />
           </View>
-          {/*GPS  */}
-          <View
-            style={{
-              width: "100%",
-              padding: 15,
-              marginVertical: 10,
-              borderRadius: 8,
-              backgroundColor: "whitesmoke",
-            }}
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: "red" }]}
+            onPress={handleDeleteAccount}
           >
-            <Text style={{ fontSize: 12, fontWeight: "bold" }}>
-              GPS Location
-            </Text>
-            <Text style={{ fontSize: 11, color: "grey" }}>
-              This app is allowed to use the GPS location services to access
-              your current location.
-            </Text>
-          </View>
-
-          {/*storage  */}
-          <View
-            style={{
-              width: "100%",
-              padding: 15,
-              marginVertical: 10,
-              borderRadius: 8,
-              backgroundColor: "whitesmoke",
-            }}
-          >
-            <Text style={{ fontSize: 12, fontWeight: "bold" }}>Storage</Text>
-            <Text style={{ fontSize: 11, color: "grey" }}>
-              This app is allowed to access and read your phone's storage.
-            </Text>
-          </View>
+            {loadingDelete ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={{ color: "white" }}>Delete Account</Text>
+            )}
+          </TouchableOpacity>
         </View>
-        <Text
-          style={{
-            alignSelf: "flex-start",
-            marginHorizontal: 16,
-            top: 16,
-            color: "grey",
-          }}
-        >
-          Account
-        </Text>
-        <View
-          style={{
-            width: "100%",
-            borderRadius: 10,
-
-            backgroundColor: "white",
-            top: 20,
-          }}
-        >
-          <View
-            style={{
-              width: "100%",
-              borderRadius: 10,
-              padding: 10,
-              backgroundColor: "white",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
-            <Text style={{ flex: 1, fontSize: 16, fontWeight: "bold" }}>
-              Delete Account
-            </Text>
-            <TouchableOpacity
-              style={{
-                width: "40%",
-                padding: 10,
-                borderRadius: 15,
-                backgroundColor: "crimson",
-                justifyContent: "space-evenly",
-                alignItems: "center",
-                flexDirection: "row",
-              }}
-              onPress={ShowDeleteModal}
-            >
-              <Text style={{ color: "white", fontSize: 16 }}>Delete</Text>
-              <AntDesign name="delete" size={25} color="white" />
-            </TouchableOpacity>
-          </View>
-          <View
-            style={{
-              padding: 15,
-              justifyContent: "center",
-              backgroundColor: "whitesmoke",
-              borderRadius: 10,
-              marginHorizontal: 8,
-              marginVertical: 8,
-            }}
-          >
-            <Text style={{ color: "red", fontSize: 16 }}>
-              This will permanently delete your account. This process cannot be
-              un done so please proceed with caution.
-            </Text>
-          </View>
-        </View>
-        <ModalView
-          content={
-            <View
-              style={{
-                width: "100%",
-                borderRadius: 10,
-                padding: 13,
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "white",
-              }}
-            >
-              <Text
-                style={{
-                  fontWeight: "bold",
-                  fontSize: 18,
-                  alignSelf: "flex-start",
-                  color: "crimson",
-                }}
-              >
-                Confirm Deletion
-              </Text>
-
-              <View
-                style={{
-                  width: "100%",
-                  padding: 15,
-                  justifyContent: "center",
-                  backgroundColor: "whitesmoke",
-                  height: 50,
-                  borderRadius: 10,
-                }}
-              >
-                <TextInput placeholder="Enter password to confirm" />
-              </View>
-
-              <View
-                style={{
-                  width: "100%",
-                  flexDirection: "row",
-                  padding: 10,
-                  justifyContent: "space-evenly",
-                  alignItems: "center",
-                  marginTop: 20,
-                }}
-              >
-                <TouchableOpacity
-                  onPress={HideDeleteModal}
-                  style={{
-                    padding: 10,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: "#3061e4",
-                    borderRadius: 20,
-                    paddingHorizontal: 40,
-                  }}
-                >
-                  <Text style={{ color: "white" }}>Cancel</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={Delete}
-                  style={{
-                    padding: 10,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: "crimson",
-                    borderRadius: 20,
-                    flexDirection: "row",
-                  }}
-                >
-                  {loadingDelete ? (
-                    <ActivityIndicator size="small" color="#fff" />
-                  ) : (
-                    <Text style={{ color: "white" }}>Delete Account</Text>
-                  )}
-                </TouchableOpacity>
-              </View>
-            </View>
-          }
-          modalVisible={deleteModal}
-        />
-        <View style={{ width: "100%", height: 70 }} />
       </ScrollView>
     </View>
   );
@@ -330,4 +179,27 @@ export default SecurityScreen;
 
 const styles = StyleSheet.create({
   container: { flex: 1, alignItems: "center", paddingHorizontal: 10 },
+  inputContainer: {
+    width: "100%",
+    backgroundColor: "whitesmoke",
+    padding: 15,
+    marginVertical: 10,
+    borderRadius: 15,
+  },
+  button: {
+    width: "40%",
+    padding: 10,
+    borderRadius: 15,
+    backgroundColor: "teal",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  deleteAccountContainer: {
+    width: "100%",
+    padding: 15,
+    borderRadius: 10,
+    backgroundColor: "white",
+    alignItems: "center",
+    marginTop: 20,
+  },
 });

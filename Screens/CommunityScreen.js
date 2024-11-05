@@ -17,11 +17,12 @@ import { useFocusEffect } from "@react-navigation/native";
 import { AuthContext } from "../context/AuthContext";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-const CommunityScreen = () => {
+const CommunityScreen = ({ navigation }) => {
+  // Add navigation prop
   const { UserID } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true); // Initial loading indicator
-  const [loading2, setLoading2] = useState(false); // Loader for post submission
+  const [loading, setLoading] = useState(true);
+  const [loading2, setLoading2] = useState(false);
   const [content, setContent] = useState("");
 
   const handleChange = (text) => setContent(text);
@@ -38,14 +39,14 @@ const CommunityScreen = () => {
     };
 
     try {
-      setLoading2(true); // Show loading for post submission
+      setLoading2(true);
       const response = await axios.post(
         "https://uga-cycle-backend-1.onrender.com/create-post",
         postData
       );
 
       if (response.status === 200) {
-        setContent(""); // Clear the input field on successful upload
+        setContent("");
         refreshPosts(); // Refresh posts after submission
       } else {
         Alert.alert("Error", "Failed to submit post. Please try again.");
@@ -53,14 +54,12 @@ const CommunityScreen = () => {
     } catch (error) {
       console.log("Error creating post", error);
     } finally {
-      setLoading2(false); // Hide loading indicator for post submission
+      setLoading2(false);
     }
   };
 
-  // Fetch posts from the server
   const fetchPosts = async (showLoading = true) => {
     if (showLoading)
-      // Only show loading for initial fetch
       try {
         const response = await axios.get(
           "https://uga-cycle-backend-1.onrender.com/get-posts"
@@ -69,19 +68,18 @@ const CommunityScreen = () => {
       } catch (error) {
         console.log("error fetching posts", error);
       } finally {
-        if (showLoading) setLoading(false); // Hide initial loading indicator
+        if (showLoading) setLoading(false);
       }
   };
 
-  // Refresh posts on first render and set up background interval refresh
   useEffect(() => {
-    fetchPosts(true); // Initial fetch with loading indicator
+    fetchPosts(true);
 
     const interval = setInterval(() => {
-      fetchPosts(); // Background fetch without loading indicator
-    }, 10000); // 10 seconds
+      fetchPosts();
+    }, 10000);
 
-    return () => clearInterval(interval); // Clean up on unmount
+    return () => clearInterval(interval);
   }, []);
 
   useFocusEffect(
@@ -122,6 +120,10 @@ const CommunityScreen = () => {
     }
   };
 
+  const navigateToNotifications = () => {
+    navigation.navigate("Notifications"); // Navigate to Notifications screen
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -131,6 +133,10 @@ const CommunityScreen = () => {
         >
           <Text style={styles.headerText}>Community</Text>
         </View>
+        <TouchableOpacity onPress={navigateToNotifications}>
+          <AntDesign name="bells" size={24} color="white" />{" "}
+          {/* Notification Icon */}
+        </TouchableOpacity>
       </View>
 
       <ScrollView style={styles.scrollView}>
@@ -230,7 +236,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   likesCount: { fontSize: 14, marginRight: 8 },
-  loader: { marginTop: 20 },
   inputContainer: {
     width: "100%",
     padding: 10,
